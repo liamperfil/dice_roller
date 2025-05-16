@@ -1,5 +1,5 @@
 # Simulador de Dados Online com Chance Controlada
-## Dinamica de jogos de azar
+## Dinamica do jogo do tigrinho
 
 Este projeto consiste em um simulador de lançamento de três dados interativo, construído com HTML, CSS e JavaScript. Ele oferece uma experiência visual de rolagem de dados e apresenta os resultados na tela.
 
