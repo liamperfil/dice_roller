@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo do Dado</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e0e7ff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dice {
+            width: 100px;
+            height: 100px;
+            transition: transform 1s;
+        }
+
+        .spin {
+            animation: spin 5s forwards;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #6366f1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4f46e5;
+        }
+
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+        }
+
+        .chance {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img class="dice" src="dice1.png" alt="Dado">
+        <img class="dice" src="dice3.png" alt="Dado">
+        <img class="dice" src="dice5.png" alt="Dado">
+        
+        <div id="result" class="result">Resultado: ?</div>
+        <div id="numSorte" class="chance">Chance: ? <br> numSorte: ?</div>
+
+        <button id="rollButton">Lançar Dado</button>
+    </div>
+    
+    <script>
+        
+        document.getElementById('rollButton').addEventListener('click', function() {
+            const diceElements = document.querySelectorAll('.dice');
+            const result = document.getElementById('result');
+            const numSorteDisplay = document.getElementById('numSorte');
+            const chance = 42; // chance percentual para dois ou três resultados iguais
+			const chanceDeTres = 17 // chance percentual para três resultados iguais
+
+            // adiciona a classe de animação
+            diceElements.forEach(dice => dice.classList.add('spin'));
+            result.textContent = 'Resultado: ?';
+
+            let animationInterval = setInterval(function() {
+                diceElements.forEach(dice => {
+                    const randomImageIndex = Math.floor(Math.random() * 6);
+                    dice.src = `dice${randomImageIndex + 1}.png`;
+                });
+            }, 500);
+
+            setTimeout(function() {
+                clearInterval(animationInterval);
+                let valor_a, valor_b, valor_c;
+
+                // gera um número aleatório para determinar se deve permitir 2 ou 3 iguais
+                let numSorte = Math.random() * 100;
+                numSorteDisplay.innerHTML = `chance: ${chance} <br>numSorte: ${numSorte}`;
+
+				// se a chance for maior que a sorte garante que 2 ou 3 números sejam iguais
+                if (numSorte < chance) {                    
+                    const resultado = Math.floor(Math.random() * 6) + 1;
+					
+					numSorte = Math.random() * 100;
+                    if (numSorte > chanceDeTres) {						                     
+                        valor_a = resultado;
+                        valor_b = resultado;
+                        valor_c = Math.floor(Math.random() * 6) + 1;
+                        while (valor_c === valor_a) {
+                            valor_c = Math.floor(Math.random() * 6) + 1; // Garantir que seja diferente
+                        }
+                    } else {
+                        // 3 iguais
+                        valor_a = resultado;
+                        valor_b = resultado;
+                        valor_c = resultado;
+                    }
+                } else {
+                    // Garante que não haja resultados iguais
+                    do {
+                        valor_a = Math.floor(Math.random() * 6) + 1;
+                        valor_b = Math.floor(Math.random() * 6) + 1;
+                        valor_c = Math.floor(Math.random() * 6) + 1;
+                    } while (valor_a === valor_b || valor_a === valor_c || valor_b === valor_c);
+                }
+
+                // Atualiza as imagens com os resultados finais
+                diceElements[0].src = `dice${valor_a}.png`;
+                diceElements[1].src = `dice${valor_b}.png`;
+                diceElements[2].src = `dice${valor_c}.png`;
+                
+                // Atualiza o resultado
+                result.textContent = `Resultado: ${valor_a}, ${valor_b}, ${valor_c}`;
+                diceElements.forEach(dice => dice.classList.remove('spin'));
+            }, 5000);
+        });
+        
+    </script>
+</body>
+</html>
+
+
+<script>
+    document.getElementById('elementoteste').innerText = 'olá';
+</script>
